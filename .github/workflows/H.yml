@@ -1,0 +1,20 @@
+name: Show First Commit
+
+on:
+  workflow_dispatch:   # allows you to run it manually from the Actions tab
+
+jobs:
+  find-first-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # fetch all history (important!)
+
+      - name: Find and display first commit
+        run: |
+          echo "Finding the first commit in this repository..."
+          FIRST_COMMIT=$(git log --reverse --pretty=format:"%H | %s" | head -n 1)
+          echo "✅ First commit found:"
+          echo "$FIRST_COMMIT"
