@@ -1,0 +1,43 @@
+name: Mirror root .py and .yml only
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch source repo
+        run: |
+          git fetch https://github.com/veerbot/suprabot1.git main
+
+      - name: Update only root .py and .yml files
+        run: |
+          # List files in source repo root
+          git ls-tree --name-only FETCH_HEAD | while read file; do
+            case "$file" in
+              *.py|*.yml)
+                git checkout FETCH_HEAD -- "$file"
+                ;;
+            esac
+          done
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add *.py *.yml || true
+          git commit -m "Sync root .py and .yml from suprabot1" || echo "No changes"
+
+      - name: Push changes
+        run: |
+          git push origin main
