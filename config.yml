@@ -113,8 +113,8 @@ gaviota:
   max_pieces: 5
 
 opening_books:
-  enabled: false
-  priority: 400
+  enabled: true
+  priority: 201
   books:
     standard_white:
       selection: best_move 
@@ -284,7 +284,7 @@ challenge:
     - bullet
     - blitz
     - rapid
-  #  - classical
+    - classical
   human_time_controls:
     - rapid
     - blitz
@@ -340,7 +340,7 @@ messages:
   goodbye_spectators: "ominously All chess players eventually crumble under my mighty paws.I mean,meow! Hehehe."
 
 whitelist:
-  - Supratsa
+  - goated_youngster
   - InvinxibleFlxsh
   - madiken
 blacklist:
