@@ -3,14 +3,14 @@ token: "TokenTimeIsBackBuddyss"  # Lichess OAuth2 Token.
 engines:
   standard:
     dir: "./engines"
-    name: "stockfish-ubuntu-x86-64-bmi2"
+    name: "tcheran-v10.0-linux-x86_64-v3"
     ponder: true
     silence_stderr: false
-    move_overhead_multiplier: 6.5
+    move_overhead_multiplier: 11.8
     uci_options:
-      Threads: 4
+      Threads: 4 #hg
       Hash: 4096
-      Move Overhead: 150
+      Move Overhead: 130
     limits:
       # time: 20.0
       # depth: 50
@@ -19,68 +19,70 @@ engines:
   variants:
     dir: "./engines"
     name: "fairy-stockfish_x86-64-bmi2"
-    ponder: false
+    ponder: true
     silence_stderr: false
-    move_overhead_multiplier: 22.0
+    move_overhead_multiplier: 1.0
     uci_options:
       Threads: 4
-      Hash: 456
-      Move Overhead: 85
+      Hash: 3456
+      Move Overhead: 240
       Use NNUE: true 
       EvalFile: "horde-28173ddccabe.nnue:racingkings-636b95f085e3.nnue:crazyhouse-8ebf84784ad2.nnue:kingofthehill-978b86d0e6a4.nnue:antichess-dd3cbe53cd4e.nnue:atomic-2cf13ff256cc.nnue:3check-cb5f517c228b.nnue"
     limits:
      # time: 20.0
       #depth: 50
     #  nodes: 5000000
-  bullet_human:
+  classical:
     dir: "./engines"
-    name: "fairy-stockfish_x86-64-bmi2"
-    ponder: false
+    name: "stockfish"
+    ponder: true
     silence_stderr: false
-    move_overhead_multiplier: 10.0
+    move_overhead_multiplier: 1.0
     uci_options:
       Threads: 4
-      Hash: 100
-      Move Overhead: 125
-      Use NNUE: true 
-      EvalFile: "nn-46832cfbead3.nnue"
+      Hash: 4096
+      Move Overhead: 10
+     # Use NNUE: true 
+    #  EvalFile: "nn-46832cfbead3.nnue"
     limits:
      # time: 20.0
       #depth: 50
     #  nodes: 5000000
   standard_human:
     dir: "./engines"
-    name: "fairy-stockfish_x86-64-bmi2"
+    name: "tcheran-v10.0-linux-x86_64-v3"
     ponder: false
     silence_stderr: false
     move_overhead_multiplier: 6.9
     uci_options:
       Threads: 4
-      Hash: 269
-      Move Overhead: 125
-      EvalFile: "nn-46832cfbead3.nnue"
+      Hash: 4096
+      Move Overhead: 500
     limits:
+
   bullet:
     dir: "./engines"
-    name: "stockfish-ubuntu-x86-64-bmi2"
+    name: "tcheran-v10.0-linux-x86_64-v3"
     ponder: true
     silence_stderr: false
-    move_overhead_multiplier: 12.897
-    uci_options:
-       Threads: 4
-       Hash: 3400
-       Move Overhead: 169
-    limits: 
-  chess960:
-    dir: "./engines"
-    name: "stockfish-ubuntu-x86-64-bmi2"
-    ponder: true
-    silence_stderr: false
-    move_overhead_multiplier: 20.0
+    move_overhead_multiplier: 12.0
     uci_options:
        Threads: 4
        Hash: 4096
-       Move Overhead: 100
+       Move Overhead: 150
+    limits: 
+    
+  chess960:
+    dir: "./engines"
+    name: "stockfish"
+    ponder: true
+    silence_stderr: false
+    move_overhead_multiplier: 5.8
+    uci_options:
+       Threads: 4
+       Hash: 4096
+       Move Overhead: 169
+       contempt: 45
     limits: 
 
 
@@ -89,7 +91,7 @@ syzygy:
     enabled: true
     paths:
       - "./engines/syzygy"
-    max_pieces: 7
+    max_pieces: 6
     instant_play: true
   antichess:
     enabled: false
@@ -111,16 +113,17 @@ gaviota:
   max_pieces: 5
 
 opening_books:
-  enabled: true
+  enabled: false
   priority: 400
   books:
     standard_white:
       selection: best_move 
-      allow_repetitions: true
+      allow_repetitions: true   
      # max_depth: 80
       names:
       #  - ai 
         - lilawhite
+      #  - one
         - Perfect2023
         - Opimus3.1
         - optimus2502
@@ -129,142 +132,184 @@ opening_books:
         - noob
     standard_black:
       selection: best_move 
-      allow_repetitions: true
+      allow_repetitions: true   
      # max depth : 45 
       names:
         - niki
       #  - optimus4
-     #   - lilablack
+        - lilablack
      #   - Titans
         - Opimus3.1
        # - optimus4
-    standard_human: 
+    standard_human_tournament: 
       selection: best_move 
-      allow_repetitions: false   
+      allow_repetitions: true   
       names: 
         - gm
         - noob
         - Titans
-    standard_white_tournament:
-      selection: best_move
-      allow_repetitions: true
-      names:
-        - draw
-        - niki   
-        - lilawhite   
     standard_black_tournament:
       selection: best_move
-      allow_repetitions: true
+      allow_repetitions: true   
       names:
-        - draw
-        - niki
-        - badwhite
-        - lilawhite
-    bullet_black:
-      selection: best_move
-      allow_repetitions: true
-      names:
-        - winwhite
+        - drawing
         - niki 
-        - badwhite
+        - one    
+        - badbot 
         - Opimus3.1
+    standard_white_tournament:
+      selection: best_move
+      allow_repetitions: true   
+      names: 
+        - drawingforwhite
+        - niki
+        - one 
+        - Opimus3.1
+    0.5+0_black:
+      selection: best_move
+      allow_repetitions: true   
+      names: 
+        - winwhite
+        - niki
+        - Opimus3.1
+    antichess_black:
+      selection: best_move
+      allow_repetitions: true   
+      names: 
+        - anti
+    horde_white:
+      selection: best_move
+      allow_repetitions: true   
+      names: 
+        - horde
+    horde_black:
+      selection: best_move
+      allow_repetitions: true   
+      names:
+        - fghhorde
+    chess960:
+      selection: best_move
+      allow_repetitions: true 
+      names:
+        - chess960 
+        - 960
+    antichess_white:
+      selection: best_move
+      allow_repetitions: false
+      names:
+        - realanti
+        - anti
+    3check_black:
+      selection: best_move
+      allow_repetitions: false
+      names:
+        - 3check
 online_moves:
   opening_explorer:
-    enabled: false
-    priority: 300
- #   player: Username
+    enabled: true
+    priority: 500
+    player: kingznight
     only_without_book: false
     use_for_variants: true
-    allow_repetitions: true
+    allow_repetitions: false              # Whether the cloud can create repetitions on the board. Can lead to unintentional draws.     
     min_time: 20
     timeout: 5
-    min_games: 10
-    only_with_wins: true
-    selection: "win_rate"
-    anti: true
+    min_games: 5
+    only_with_wins: false
+    selection: "performance"
+    anti: false
     # max_depth: 20
 
   lichess_cloud:
-    enabled: false
+    enabled: true
     priority: 200
-    only_without_book: true
-    min_eval_depth: 20
+    only_without_book: false
+    min_eval_depth: 35
     min_time: 10
     timeout: 3
     use_for_variants: false
-    allow_repetitions: true
-    trust_eval: true        
-    
+    allow_repetitions: true              # Whether the cloud can create repetitions on the board. Can lead to unintentional draws.
+    trust_eval: true
     # max_depth: 30
+    min_depth: 13
 
   chessdb:
     enabled: true
-    priority: 250
+    priority: 255
     only_without_book: false
-    min_candidates: 2
-    min_time: 20
-    timeout: 3
-    selection: "optimal"
-    allow_repetitions: true 
-    trust_eval: true 
-    # max_depth: 30
-
+    allow_repetitions: true             # Whether the chessdb can create repetitions on the board. Can lead to unintentional draws.
+    trust_eval: true                     # Whether the chessdb eval should be trusted for draw offers and resignations.
+    min_time: 10                       
+    timeout: 3             
+    best_move: false       
+            
   online_egtb:
     enabled: true
     min_time: 20
     timeout: 3
 
 offer_draw:
-  enabled: true
+  enabled: false
   score: 10
-  consecutive_moves: 10
-  min_game_length: 40
+  consecutive_moves: 4
+  min_game_length: 30
   against_humans: false
-  min_rating: 3000
+ # min_rating: 3000
 
 resign:
   enabled: false
-  score: -1000
+  score: -1200
   consecutive_moves: 6
   against_humans: false
-  min_rating: 3000
+  #min_rating: 3000
 
 challenge:
   concurrency: 1
   bullet_with_increment_only: false
-  max_takebacks: 2
-  min_initial: 60
-  max_initial: 1200
+  max_takebacks: 1
+  min_initial: 120
+ # max_initial: 1200
   variants:
     - standard
     - chess960
-    - antichess
-    - atomic
-    - kingOfTheHill
-    - racingKings
-    - threeCheck
+ #   - antichess
+#    - atomic
+  #  - kingOfTheHill
+#    - racingKings
+#    - threeCheck
     - fromPosition
-    - crazyhouse
-  time_controls:
+#    - crazyhouse
+   # - horde
+  bot_time_controls:
     - bullet
     - blitz
     - rapid
   #  - classical
+  human_time_controls:
+    - rapid
+    - blitz
+    - bullet
+    - classical
   bot_modes:
-   # - casual
- #   - rated
+    - casual
+    - rated
   human_modes:
-  #  - casual
-   #- rated
+    - casual
+    - rated
 
 matchmaking:
-  delay: 10
+  delay: 485
   timeout: 30
   selection: cyclic
   types:
+    hp:
+      tc: 3+2
+    bp:
+      tc: 0.75+0
     bullet:
-      tc: 0+1
-      variant: chess960
+      tc: 1+0
+      variant: crazyhouse
+    #  rated: true
     bulle2:
       tc: 3+0
     bc:
@@ -274,7 +319,7 @@ matchmaking:
     gulugulu:
       tc: 0+1
     guliguli:
-      tc: 10+0
+      tc: 4+0
     hvj:
       tc: 1.5+0
     win:
@@ -282,21 +327,26 @@ matchmaking:
     loss:
       tc: 2+0
     drum:
-      tc: 0.5+0
+      tc: 0.5+1
       variant: chess960
+    asss:
+      tc: 1+0
+      variant: antichess
 
 messages:
-  greeting: "Konnichiwa guzaimase! ❤️‍🔥Using help of {engine} Type !help to glimpse my arsenal. Best of luck"
-  goodbye: "GGs, ezz. May we meet again, may I win again 💶 {me} signing off!"
-  greeting_spectators: "ITZ {engine} in {me} competing for more depth with @{opponent} Type !help for a list of commands."
-  goodbye_spectators: "SIMULATION TERMINATED@{opponent}.May our paths cross again!?Thanks For watching, {me} signing off!"
+  greeting: "For it is foretold by many before, we will grind to an ending, unhalting, forever…and ever…and…ever… hehehe,"
+  goodbye: "You played well. Not well enough. Meow Purr !help for a list of commands."
+  greeting_spectators: "I am a tiger and you are in the jungle I call eternity. Hehehe."
+  goodbye_spectators: "ominously All chess players eventually crumble under my mighty paws.I mean,meow! Hehehe."
 
 whitelist:
   - Supratsa
-  - Shresthmah
+  - InvinxibleFlxsh
+  - madiken
 blacklist:
   - NimsiluBot
- # - VEER-OMEGA-BOT
+ # - VEER-OMEGA-
+online_blacklists:
 books:
   Titans: "./engines/black.bin"
   optimus2502: "./engines/OPTIMUS2502.bin"
@@ -310,5 +360,15 @@ books:
   lilawhite: "./engines/lilawhite.bin"
   lilablack: "./engines/lila.bin"
   winwhite: "./engines/winwhite.bin"
-  draw: "./engines/drawing.bin"
-  badwhite: "./engines/badwhite.bin"
+  one: "./engines/book1.bin"
+  anti: "./engines/anti_book.bin"
+  horde: "./engines/horde_book_white.bin"
+  fghhorde: "./engines/horde_book_black.bin"
+  drawing: "./engines/drawing.bin"
+  drawingforwhite: "./engines/drawingforwhite.bin"
+  badbot: "./engines/badwhite.bin"
+  chess960: "./engines/chess960.bin"
+  960: "./engines/randomchess.bin"
+  realanti: "./engines/anti.bin"
+  3check: "./engines/3check.bin"
+

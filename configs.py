@@ -3,24 +3,24 @@ from typing import Any, Literal
 
 
 @dataclass
-class Limit_Config:
+class LimitConfig:
     time: float | None
     depth: int | None
     nodes: int | None
 
 
 @dataclass
-class Engine_Config:
+class EngineConfig:
     path: str
     ponder: bool
     silence_stderr: bool
     move_overhead_multiplier: float
     uci_options: dict[str, Any]
-    limits: Limit_Config
+    limits: LimitConfig
 
 
 @dataclass
-class Syzygy_Config:
+class SyzygyConfig:
     enabled: bool
     paths: list[str]
     max_pieces: int
@@ -28,30 +28,30 @@ class Syzygy_Config:
 
 
 @dataclass
-class Gaviota_Config:
+class GaviotaConfig:
     enabled: bool
     paths: list[str]
     max_pieces: int
 
 
 @dataclass
-class Books_Config:
-    selection: Literal['weighted_random', 'uniform_random', 'best_move']
+class BooksConfig:
+    selection: Literal["weighted_random", "uniform_random", "best_move"]
     max_depth: int | None
     allow_repetitions: bool | None
     names: dict[str, str]
 
 
 @dataclass
-class Opening_Books_Config:
+class OpeningBooksConfig:
     enabled: bool
     priority: int
     read_learn: bool | None
-    books: dict[str, Books_Config]
+    books: dict[str, BooksConfig]
 
 
 @dataclass
-class Opening_Explorer_Config:
+class OpeningExplorerConfig:
     enabled: bool
     priority: int
     player: str | None
@@ -62,14 +62,14 @@ class Opening_Explorer_Config:
     timeout: int
     min_games: int
     only_with_wins: bool
-    selection: Literal['performance', 'win_rate']
+    selection: Literal["performance", "win_rate"]
     anti: bool
     max_depth: int | None
     max_moves: int | None
 
 
 @dataclass
-class Lichess_Cloud_Config:
+class LichessCloudConfig:
     enabled: bool
     priority: int
     only_without_book: bool
@@ -84,37 +84,36 @@ class Lichess_Cloud_Config:
 
 
 @dataclass
-class ChessDB_Config:
+class ChessDBConfig:
     enabled: bool
     priority: int
     only_without_book: bool
     allow_repetitions: bool
     trust_eval: bool
-    min_candidates: int
     min_time: int
     timeout: int
-    selection: Literal['optimal', 'best', 'good']
+    best_move: bool
     max_depth: int | None
     max_moves: int | None
 
 
 @dataclass
-class Online_EGTB_Config:
+class OnlineEGTBConfig:
     enabled: bool
     min_time: int
     timeout: int
 
 
 @dataclass
-class Online_Moves_Config:
-    opening_explorer: Opening_Explorer_Config
-    lichess_cloud: Lichess_Cloud_Config
-    chessdb: ChessDB_Config
-    online_egtb: Online_EGTB_Config
+class OnlineMovesConfig:
+    opening_explorer: OpeningExplorerConfig
+    lichess_cloud: LichessCloudConfig
+    chessdb: ChessDBConfig
+    online_egtb: OnlineEGTBConfig
 
 
 @dataclass
-class Offer_Draw_Config:
+class OfferDrawConfig:
     enabled: bool
     score: int
     consecutive_moves: int
@@ -124,7 +123,7 @@ class Offer_Draw_Config:
 
 
 @dataclass
-class Resign_Config:
+class ResignConfig:
     enabled: bool
     score: int
     consecutive_moves: int
@@ -133,7 +132,7 @@ class Resign_Config:
 
 
 @dataclass
-class Challenge_Config:
+class ChallengeConfig:
     concurrency: int
     max_takebacks: int
     bullet_with_increment_only: bool
@@ -142,17 +141,30 @@ class Challenge_Config:
     min_initial: int | None
     max_initial: int | None
     variants: list[str]
-    time_controls: list[str]
+    bot_time_controls: list[str]
+    human_time_controls: list[str]
     bot_modes: list[str]
     human_modes: list[str]
 
 
 @dataclass
-class Matchmaking_Type_Config:
+class MatchmakingTypeConfig:
     tc: str
     rated: bool | None
-    variant: Literal['standard', 'chess960', 'crazyhouse', 'antichess', 'atomic',
-                     'horde', 'kingOfTheHill', 'racingKings', 'threeCheck'] | None
+    variant: (
+        Literal[
+            "standard",
+            "chess960",
+            "crazyhouse",
+            "antichess",
+            "atomic",
+            "horde",
+            "kingOfTheHill",
+            "racingKings",
+            "threeCheck",
+        ]
+        | None
+    )
     weight: int | None
     multiplier: int | None
     min_rating_diff: int | None
@@ -160,15 +172,15 @@ class Matchmaking_Type_Config:
 
 
 @dataclass
-class Matchmaking_Config:
+class MatchmakingConfig:
     delay: int
     timeout: int
-    selection: Literal['weighted_random', 'sequential']
-    types: dict[str, Matchmaking_Type_Config]
+    selection: Literal["weighted_random", "sequential"]
+    types: dict[str, MatchmakingTypeConfig]
 
 
 @dataclass
-class Messages_Config:
+class MessagesConfig:
     greeting: str | None
     goodbye: str | None
     greeting_spectators: str | None
