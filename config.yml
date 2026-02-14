@@ -6,11 +6,11 @@ engines:
     name: "stockfish"
     ponder: true
     silence_stderr: false
-    move_overhead_multiplier: 11.8
+    move_overhead_multiplier: 13.8
     uci_options:
       Threads: 4 #hg
       Hash: 4096
-      Move Overhead: 130
+      Move Overhead: 50
     limits:
       # time: 20.0
       # depth: 50
@@ -21,11 +21,11 @@ engines:
     name: "fairy-stockfish_x86-64-bmi2"
     ponder: true
     silence_stderr: false
-    move_overhead_multiplier: 1.0
+    move_overhead_multiplier: 7.0
     uci_options:
       Threads: 4
       Hash: 3456
-      Move Overhead: 240
+      Move Overhead: 100
       Use NNUE: true 
       EvalFile: "horde-28173ddccabe.nnue:racingkings-636b95f085e3.nnue:crazyhouse-8ebf84784ad2.nnue:kingofthehill-978b86d0e6a4.nnue:antichess-dd3cbe53cd4e.nnue:atomic-2cf13ff256cc.nnue:3check-cb5f517c228b.nnue"
     limits:
@@ -65,11 +65,11 @@ engines:
     name: "stockfish"
     ponder: true
     silence_stderr: false
-    move_overhead_multiplier: 12.0
+    move_overhead_multiplier: 20.0
     uci_options:
        Threads: 4
        Hash: 4096
-       Move Overhead: 150
+       Move Overhead: 100
     limits: 
     
   chess960:
