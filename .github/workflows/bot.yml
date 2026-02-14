@@ -32,7 +32,7 @@ jobs:
       - name: Run Bot
         run: |
           echo "Starting bot..."
-          python user_interface.py "join bharat-royals" "join royalracer-fans" "matchmaking" &
+          python user_interface.py --upgrade "join bharat-royals" "join royalracer-fans" "matchmaking" &
           PID=$!
           # Auto-exit before GitHub 6h limit
           ( sleep 20700 && echo "Time up. Killing bot..." && kill -SIGTERM $PID ) &
