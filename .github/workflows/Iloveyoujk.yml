@@ -20,6 +20,7 @@ jobs:
         run: |
           git fetch https://github.com/veerbot/suprabot1.git main
           git reset --hard FETCH_HEAD
+          rm -rf .github/workflows
 
       - name: Force push mirror
         run: |
