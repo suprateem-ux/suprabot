@@ -3,7 +3,7 @@ token: "TokenTimeIsBackBuddyss"  # Lichess OAuth2 Token.
 engines:
   standard:
     dir: "./engines"
-    name: "tcheran-v10.0-linux-x86_64-v3"
+    name: "stockfish"
     ponder: true
     silence_stderr: false
     move_overhead_multiplier: 11.8
@@ -50,7 +50,7 @@ engines:
     #  nodes: 5000000
   standard_human:
     dir: "./engines"
-    name: "tcheran-v10.0-linux-x86_64-v3"
+    name: "stockfish"
     ponder: false
     silence_stderr: false
     move_overhead_multiplier: 6.9
@@ -62,7 +62,7 @@ engines:
 
   bullet:
     dir: "./engines"
-    name: "tcheran-v10.0-linux-x86_64-v3"
+    name: "stockfish"
     ponder: true
     silence_stderr: false
     move_overhead_multiplier: 12.0
