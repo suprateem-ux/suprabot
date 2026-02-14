@@ -2,4 +2,5 @@ aiohttp[speedups]==3.12.13
 chess[polyglot,syzygy]==1.11.2
 psutil==7.0.0
 PyYAML==6.0.2
+prompt-toolkit==3.0.52
 tenacity==9.1.2
