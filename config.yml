@@ -249,7 +249,7 @@ online_moves:
     timeout: 3
 
 offer_draw:
-  enabled: false
+  enabled: true
   score: 10
   consecutive_moves: 4
   min_game_length: 30
@@ -294,8 +294,8 @@ challenge:
   #  - casual
   #  - rated
   human_modes:
-  #  - casual
-  #  - rated
+    - casual
+    - rated
 
 matchmaking:
   delay: 485
