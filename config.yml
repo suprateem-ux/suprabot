@@ -257,7 +257,7 @@ offer_draw:
  # min_rating: 3000
 
 resign:
-  enabled: false
+  enabled: true
   score: -1200
   consecutive_moves: 6
   against_humans: false
@@ -291,11 +291,11 @@ challenge:
     - bullet
     - classical
   bot_modes:
-    - casual
-    - rated
+  #  - casual
+  #  - rated
   human_modes:
-    - casual
-    - rated
+  #  - casual
+  #  - rated
 
 matchmaking:
   delay: 485
