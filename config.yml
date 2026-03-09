@@ -208,7 +208,7 @@ online_moves:
   opening_explorer:
     enabled: true
     priority: 500
-    player: kingznight
+    player: goated_youngster
     only_without_book: false
     use_for_variants: true
     allow_repetitions: false              # Whether the cloud can create repetitions on the board. Can lead to unintentional draws.     
