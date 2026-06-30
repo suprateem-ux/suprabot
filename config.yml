@@ -114,7 +114,7 @@ gaviota:
 
 opening_books:
   enabled: true
-  priority: 201
+  priority: 699
   books:
     standard_white:
       selection: best_move 
