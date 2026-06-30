@@ -1,0 +1,25 @@
+name: Extract and Commit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract zip
+        run: unzip -o engines/polyglot-books.zip -d engines
+
+      - name: Commit extracted files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add engines/
+          git commit -m "Extract polyglot books" || echo "No changes to commit"
+          git push
