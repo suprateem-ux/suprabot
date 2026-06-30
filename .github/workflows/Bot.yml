@@ -46,7 +46,7 @@ jobs:
       - name: Run Bot
         run: |
           echo "Starting bot..."
-          python user_interface.py --upgrade "join bharat-royals" "join royalracer-fans" "join world-chess-learners" &
+          python user_interface.py --upgrade "join bharat-royals" "join royalracer-fans" "join world-chess-learners" "matchmaking" &
           PID=$!
 
           # Auto-exit before GitHub 6h limit
