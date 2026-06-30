@@ -340,6 +340,7 @@ messages:
   goodbye_spectators: "ominously All chess players eventually crumble under my mighty paws.I mean,meow! Hehehe."
 
 whitelist:
+  - kingznight
   - goated_youngster
   - InvinxibleFlxsh
   - madiken
