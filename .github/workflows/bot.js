@@ -28,9 +28,17 @@ jobs:
 
       - name: Install dependencies & prepare
         run: |
-          curl -sSL https://raw.githubusercontent.com/ppigazzini/stockfish-downloader/main/posix_helper.sh | sh -s
-          tar -xf stockfish-*.tar && rm stockfish-*.tar
-          mv stockfish/stockfish-* engines/stockfish && rm -r stockfish
+          wget "https://github.com/official-stockfish/Stockfish/releases/download/stockfish-dev-20260630-60888387/stockfish-linux-x86-64-universal.tar.gz"
+
+         tar -xzf stockfish-linux-x86-64-universal.tar.gz
+         rm stockfish-linux-x86-64-universal.tar.gz
+
+         find . -type f | grep stockfish
+
+         BIN=$(find . -type f | grep "stockfish.*x86-64-universal\|stockfish" | head -n 1)
+
+         mv "$BIN" engines/stockfish
+         chmod +x engines/stockfish
           sed -i "s/TokenTimeIsBackBuddyss/${{ secrets.LICHESS_KEY }}/g" config.yml
           pip install -r requirements.txt 
           chmod +x ./engines/stockfish-ubuntu-x86-64-bmi2 ./engines/fairy-stockfish_x86-64-bmi2 ./engines/stockfish
