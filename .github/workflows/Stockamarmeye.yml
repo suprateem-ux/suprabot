@@ -1,0 +1,28 @@
+name: Debug Stockfish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Stockfish
+        run: |
+          wget "https://github.com/official-stockfish/Stockfish/releases/download/stockfish-dev-20260630-60888387/stockfish-linux-x86-64-universal.tar.gz"
+
+      - name: Show tar contents
+        run: |
+          echo "=== TAR CONTENTS ==="
+          tar -tzf stockfish-linux-x86-64-universal.tar.gz
+
+      - name: Extract and inspect
+        run: |
+          tar -xzf stockfish-linux-x86-64-universal.tar.gz
+
+          echo "=== ALL FILES ==="
+          find .
+
+          echo "=== FILE TYPES ==="
+          find . -type f | xargs file
