@@ -1,0 +1,23 @@
+name: Unzip file
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download zip
+        run: |
+          mkdir -p engines
+          curl -L -o engine.zip "https://github.com/suprateem-ux/suprabot/raw/main/engines/fairy-stockfish-linux-x86-64-bmi2%204.zip"
+
+      - name: Unzip file
+        run: |
+          unzip -o "engine.zip" -d engines
+
+      - name: Show files
+        run: ls -R engines
