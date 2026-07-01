@@ -272,11 +272,11 @@ challenge:
   variants:
     - standard
     - chess960
- #   - antichess
-#    - atomic
-  #  - kingOfTheHill
-#    - racingKings
-#    - threeCheck
+    - antichess
+    - atomic
+    - kingOfTheHill
+    - racingKings
+    - threeCheck
     - fromPosition
 #    - crazyhouse
    # - horde
@@ -291,8 +291,8 @@ challenge:
     - bullet
     - classical
   bot_modes:
-  #  - casual
-  #  - rated
+    - casual
+    - rated
   human_modes:
     - casual
     - rated
