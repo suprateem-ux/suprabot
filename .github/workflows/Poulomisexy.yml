@@ -1,0 +1,26 @@
+name: Download Fairy Stockfish Artifact
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create engines folder
+        run: mkdir -p engines
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: 8005837179
+          github-token: ${{ secrets.GH_PAT }}
+          repository: fairy-stockfish/Fairy-Stockfish
+          run-id: 28507816527
+          path: engines
+
+      - name: Show engines contents
+        run: ls -R engines
