@@ -1,0 +1,28 @@
+name: Download Fairy Stockfish Artifact
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create engines folder
+        run: mkdir -p engines
+
+      - name: Download artifact zip from GitHub API
+        run: |
+          curl -L \
+            -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
+            -H "Accept: application/vnd.github+json" \
+            -o artifact.zip \
+            "https://api.github.com/repos/fairy-stockfish/Fairy-Stockfish/actions/artifacts/8005837179/zip"
+
+      - name: Extract into engines folder
+        run: unzip artifact.zip -d engines
+
+      - name: Show files
+        run: ls -R engines
