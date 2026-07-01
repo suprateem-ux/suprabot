@@ -335,9 +335,9 @@ matchmaking:
 
 messages:
   greeting: "For it is foretold by many before, we will grind to an ending, unhalting, forever…and ever…and…ever… hehehe,"
-  goodbye: "You played well. Not well enough. Meow Purr !help for a list of commands."
-  greeting_spectators: "I am a tiger and you are in the jungle I call eternity. Hehehe."
-  goodbye_spectators: "ominously All chess players eventually crumble under my mighty paws.I mean,meow! Hehehe."
+  goodbye: "You played well. OH REALLY ! . !help for a list of commands."
+  greeting_spectators: "Oh really Hehehe."
+  goodbye_spectators: "Oh really? Hehehe."
 
 whitelist:
   - kingznight
