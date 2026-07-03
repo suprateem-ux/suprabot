@@ -1,0 +1,184 @@
+import json
+import os
+from collections import defaultdict
+from datetime import datetime, timedelta
+from typing import Any
+
+from botli_dataclasses import Bot, MatchmakingData, MatchmakingType
+from enums import ChallengeColor, PerfType
+from exceptions import NoOpponentError
+
+
+class Opponents:
+    def __init__(self, delay: int, username: str) -> None:
+        self.delay = timedelta(seconds=delay)
+        self.matchmaking_file = f"{username}_matchmaking.json"
+        self.opponent_dict = self._load(self.matchmaking_file)
+        self.busy_bots: list[Bot] = []
+        self.last_opponent: tuple[str, ChallengeColor, MatchmakingType]
+
+    def get_opponent(
+        self, online_bots: list[Bot], matchmaking_type: MatchmakingType, user_ratings: dict[PerfType, int]
+    ) -> tuple[Bot, ChallengeColor] | None:
+        for bot in self._filter_bots(online_bots, matchmaking_type, user_ratings):
+            if bot in self.busy_bots:
+                continue
+
+            data = self.opponent_dict[bot.username][matchmaking_type.perf_type]
+            if data.color == ChallengeColor.BLACK or data.release_time <= datetime.now():
+                self.last_opponent = (bot.username, data.color, matchmaking_type)
+                return bot, data.color
+
+        self.busy_bots.clear()
+
+    def add_timeout(self, success: bool, game_duration: timedelta) -> None:
+        username, color, matchmaking_type = self.last_opponent
+        data = self.opponent_dict[username][matchmaking_type.perf_type]
+
+        data.multiplier = 1 if success else abs(data.multiplier * 2)
+        timeout = (game_duration + self.delay) * matchmaking_type.multiplier * data.multiplier
+
+        if data.release_time > datetime.now():
+            data.release_time += timeout
+        else:
+            data.release_time = datetime.now() + timeout
+
+        release_str = data.release_time.isoformat(sep=" ", timespec="seconds")
+        print(f"{username} will not be challenged to a new game pair before {release_str}.")
+
+        if success and color == ChallengeColor.WHITE:
+            data.color = ChallengeColor.BLACK
+        else:
+            data.color = ChallengeColor.WHITE
+
+        self.busy_bots.clear()
+        self._save(self.matchmaking_file)
+
+    def set_timeout(self, wait_seconds: int) -> None:
+        username, _, matchmaking_type = self.last_opponent
+        data = self.opponent_dict[username][matchmaking_type.perf_type]
+
+        if data.multiplier == 1:
+            data.multiplier = -1
+
+        data.release_time = max(data.release_time, datetime.now() + timedelta(seconds=wait_seconds))
+
+        release_str = data.release_time.isoformat(sep=" ", timespec="seconds")
+        print(f"{username} will not be challenged to a new game pair before {release_str}.")
+
+        data.color = ChallengeColor.WHITE
+
+        self.busy_bots.clear()
+        self._save(self.matchmaking_file)
+
+    def reset_release_time(self, perf_type: PerfType) -> None:
+        for perf_types in self.opponent_dict.values():
+            perf_types[perf_type].release_time = datetime.now()
+
+        self.busy_bots.clear()
+
+    @staticmethod
+    def _filter_bots(
+        bots: list[Bot], matchmaking_type: MatchmakingType, user_ratings: dict[PerfType, int]
+    ) -> list[Bot]:
+        perf_type = matchmaking_type.perf_type
+
+        def bot_filter(bot: Bot) -> bool:
+            if perf_type not in bot.ratings:
+                return False
+
+            rating_diff = abs(bot.ratings[perf_type] - user_ratings[perf_type])
+            if matchmaking_type.max_rating_diff and rating_diff > matchmaking_type.max_rating_diff:
+                return False
+
+            if matchmaking_type.min_rating_diff and rating_diff < matchmaking_type.min_rating_diff:
+                return False
+
+            return True
+
+        def sort_key(bot: Bot) -> int:
+            return abs(abs(bot.ratings[perf_type] - user_ratings[perf_type]) - matchmaking_type.target_rating_diff)
+
+        bots = sorted(filter(bot_filter, bots), key=sort_key)
+        if not bots:
+            raise NoOpponentError
+
+        return bots
+
+    def _load(self, matchmaking_file: str) -> defaultdict[str, defaultdict[PerfType, MatchmakingData]]:
+        if not os.path.isfile(matchmaking_file):
+            return defaultdict(lambda: defaultdict(MatchmakingData))
+
+        with open(matchmaking_file, encoding="utf-8") as file:
+            try:
+                dict_ = json.load(file)
+                if isinstance(dict_, list):
+                    return self._update_format(dict_)
+
+            except json.JSONDecodeError as e:
+                print(f'Error while processing the file "{matchmaking_file}": {e}')
+                return defaultdict(lambda: defaultdict(MatchmakingData))
+
+            except PermissionError:
+                print("Loading the matchmaking file failed due to missing read permissions.")
+                return defaultdict(lambda: defaultdict(MatchmakingData))
+
+            return defaultdict(
+                lambda: defaultdict(MatchmakingData),
+                {
+                    username: defaultdict(
+                        MatchmakingData,
+                        {
+                            PerfType(perf_type): MatchmakingData.from_dict(matchmaking_dict)
+                            for perf_type, matchmaking_dict in perf_types.items()
+                        },
+                    )
+                    for username, perf_types in dict_.items()
+                },
+            )
+
+    def _min_opponent_dict(self) -> dict[str, dict[PerfType, dict[str, Any]]]:
+        return {
+            username: user_dict
+            for username, perf_types in self.opponent_dict.items()
+            if (
+                user_dict := {
+                    perf_type: matchmaking_dict
+                    for perf_type, matchmaking_data in perf_types.items()
+                    if (matchmaking_dict := matchmaking_data.to_dict())
+                }
+            )
+        }
+
+    def _save(self, matchmaking_file: str) -> None:
+        min_opponent_dict = self._min_opponent_dict()
+        if not min_opponent_dict:
+            return
+
+        try:
+            with open(matchmaking_file, "w", encoding="utf-8") as json_output:
+                json.dump(min_opponent_dict, json_output)
+        except PermissionError:
+            print("Saving the matchmaking file failed due to missing write permissions.")
+
+    @staticmethod
+    def _update_format(list_format: list[dict[str, Any]]) -> defaultdict[str, defaultdict[PerfType, MatchmakingData]]:
+        dict_format: defaultdict[str, defaultdict[PerfType, MatchmakingData]] = defaultdict(
+            lambda: defaultdict(MatchmakingData)
+        )
+        for old_dict in list_format:
+            username = old_dict.pop("username")
+
+            perf_types: defaultdict[PerfType, MatchmakingData] = defaultdict(MatchmakingData)
+            for perf_type, value in old_dict.items():
+                release_time = (
+                    datetime.fromisoformat(value["release_time"]) if "release_time" in value else datetime.now()
+                )
+                multiplier = value.get("multiplier", 1)
+                color = ChallengeColor(value["color"]) if "color" in value else ChallengeColor.WHITE
+
+                perf_types[PerfType(perf_type)] = MatchmakingData(release_time, multiplier, color)
+
+            dict_format[username] = perf_types
+
+        return dict_format
