@@ -29,7 +29,7 @@ jobs:
 
       - name: Install dependencies & prepare
         run: |
-          wget "https://github.com/official-stockfish/Stockfish/releases/download/stockfish-dev-20260630-60888387/stockfish-linux-x86-64-universal.tar.gz"
+          wget "https://github.com/official-stockfish/Stockfish/releases/download/stockfish-dev-20260703-d5bbc6b6/stockfish-linux-x86-64-universal.tar.gz"
 
           tar -xzf stockfish-linux-x86-64-universal.tar.gz
           rm stockfish-linux-x86-64-universal.tar.gz
