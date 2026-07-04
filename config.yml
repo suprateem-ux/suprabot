@@ -263,39 +263,63 @@ resign:
   against_humans: false
   #min_rating: 3000
 
-challenge:
-  concurrency: 1
-  bullet_with_increment_only: false
-  max_takebacks: 1
-  min_initial: 120
- # max_initial: 1200
-  variants:
-    - standard
-    - chess960
-    - antichess
-    - atomic
-    - kingOfTheHill
-    - racingKings
-    - threeCheck
-    - fromPosition
-#    - crazyhouse
-   # - horde
-  bot_time_controls:
-    - bullet
-    - blitz
-    - rapid
-    - classical
-  human_time_controls:
-    - rapid
-    - blitz
-    - bullet
-    - classical
-  bot_modes:
-    - casual
-    - rated
-  human_modes:
-    - casual
-    - rated
+challenge:                                # Incoming challenges.
+  concurrency: 1                          # Number of games to play simultaneously.
+  max_takebacks: 3                        # Maximum number of takebacks granted to a human.
+  human:                                  # Settings when the opponent is a human.
+    bullet_with_increment_only: false     # Whether bullet games should only be accepted with increment.
+#   min_increment: 0                      # Minimum amount of increment to accept a challenge.
+#   max_increment: 180                    # Maximum amount of increment to accept a challenge.
+#   min_initial: 0                        # Minimum amount of initial time to accept a challenge.
+#   max_initial: 10800                    # Maximum amount of initial time to accept a challenge.
+#   max_estimated_game_duration: 15       # Maximum expected duration of a game in minutes.
+    variants:                             # Chess variants to accept (https://lichess.org/variant).
+      - standard
+      - chess960
+      - fromPosition
+      - antichess
+      - atomic
+      - crazyhouse
+      - horde
+      - kingOfTheHill
+      - racingKings
+      - threeCheck
+    time_controls:                        # Speeds or time controls in initial_minutes+increment_seconds format to accept.
+      - bullet
+      - blitz
+      - rapid
+ #     - classical
+#     - 25+0
+    modes:                                # Game modes to accept.
+      - casual                            # Unrated games.
+      - rated                             # Rated games
+  bot:                                    # Settings when the opponent is a BOT.
+    bullet_with_increment_only: false     # Whether bullet games should only be accepted with increment.
+#   min_increment: 0                      # Minimum amount of increment to accept a challenge.
+#   max_increment: 180                    # Maximum amount of increment to accept a challenge.
+#   min_initial: 0                        # Minimum amount of initial time to accept a challenge.
+#   max_initial: 10800                    # Maximum amount of initial time to accept a challenge.
+#   max_estimated_game_duration: 15       # Maximum expected duration of a game in minutes.
+    variants:                             # Chess variants to accept (https://lichess.org/variant).
+      - standard
+      - chess960
+      - fromPosition
+      - antichess
+      - atomic
+      - crazyhouse
+      - horde
+      - kingOfTheHill
+      - racingKings
+      - threeCheck
+    time_controls:                        # Speeds or time controls in initial_minutes+increment_seconds format to accept.
+      - bullet
+      - blitz
+      - rapid
+#     - classical
+#     - 25+0
+    modes:                                # Game modes to accept.
+      - casual                            # Unrated games.
+      - rated                             # Rated games
 
 matchmaking:
   delay: 485
