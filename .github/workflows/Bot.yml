@@ -68,6 +68,7 @@ jobs:
             "join bharat-royals" \
             "join royalracer-fans" \
             "join world-chess-learners" \
+            "tournament jB6xXHKF world-chess-learners" \
             "matchmaking" &
           PID=$!
 
