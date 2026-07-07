@@ -1,0 +1,88 @@
+name: Run bot
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "user_interface.py"
+      - "config.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+
+    concurrency:
+      group: bot-run
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies & prepare
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+          echo "Fetching latest Stockfish release..."
+
+          RELEASE_JSON=$(curl -s "https://api.github.com/repos/official-stockfish/Stockfish/releases?per_page=1")
+
+          DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.[0].assets[] | select(.name | test("linux-x86-64-universal.tar.gz$")) | .browser_download_url')
+
+          if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
+            echo "Failed to find Stockfish download URL."
+            exit 1
+          fi
+
+          echo "Downloading:"
+          echo "$DOWNLOAD_URL"
+
+          wget "$DOWNLOAD_URL" -O stockfish.tar.gz
+
+          tar -xzf stockfish.tar.gz
+          rm stockfish.tar.gz
+
+          mv stockfish/stockfish-linux-x86-64-universal engines/stockfish
+          rm -rf stockfish
+
+          chmod +x engines/stockfish
+          chmod +x engines/fairy-stockfish_x86-64-bmi2
+
+          sed -i "s/TokenTimeIsBackBuddyss/${{ secrets.LICHESS_KEY }}/g" config.yml
+
+          pip install -r requirements.txt
+
+      - name: Run Bot
+        run: |
+          echo "Starting bot..."
+          python user_interface.py --upgrade \
+            "join bharat-royals" \
+            "join royalracer-fans" \
+            "join world-chess-learners" \
+            "matchmaking" &
+          PID=$!
+
+          # Auto-exit before GitHub's 6-hour limit
+          (
+            sleep 20700
+            echo "Time up. Killing bot..."
+            kill -SIGTERM $PID
+          ) &
+
+          wait $PID
+          echo "Bot ended cleanly."
+
+      - name: Self-Restart
+        if: always()
+        run: gh workflow run "Run bot"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
