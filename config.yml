@@ -176,6 +176,7 @@ opening_books:
       selection: best_move
       allow_repetitions: true   
       names: 
+        - sex
         - anti
     horde_white:
       selection: best_move
@@ -373,6 +374,7 @@ blacklist:
  # - VEER-OMEGA-
 online_blacklists:
 books:
+  sex: "./engines/Antichesshu.bin"
   Titans: "./engines/black.bin"
   optimus2502: "./engines/OPTIMUS2502.bin"
   optimus4: "./engines/win.bin"
